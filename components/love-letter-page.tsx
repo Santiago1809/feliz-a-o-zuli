@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, Clock, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { Heart, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 
 // Fecha: 1 enero 2026
 const TARGET_DATE = new Date("2026-01-01T00:00:00-05:00").getTime();
@@ -96,10 +96,6 @@ export function LoveLetterPage() {
           <p className="text-rose-600 mb-8 text-lg">
             Este mensaje se desbloqueará el 1 de enero de 2026 a la medianoche
           </p>
-          <div className="flex items-center justify-center gap-2 mb-8">
-            <Clock className="w-5 h-5 text-rose-500" />
-            <span className="text-rose-500 text-sm">Hora Colombia (UTC-5)</span>
-          </div>
 
           <div className="grid grid-cols-4 gap-3 md:gap-4 mb-8">
             <TimeBlock value={timeLeft.days} label="Días" />
