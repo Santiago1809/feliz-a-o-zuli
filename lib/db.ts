@@ -23,7 +23,10 @@ function chooseDbPath() {
   } catch (err) {
     // probably running on a read-only filesystem (Vercel). Fall back to tmpdir.
     const tmpPath = path.join(os.tmpdir(), "messages.db");
-    console.warn("lib/db: data directory not writable, falling back to tmpdir:", tmpPath);
+    console.warn(
+      "lib/db: data directory not writable, falling back to tmpdir:",
+      tmpPath
+    );
     return tmpPath;
   }
 }
