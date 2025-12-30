@@ -122,5 +122,22 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* keep system-ui as default elsewhere */
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+      Arial, sans-serif;
+  }
+
+  /* Cards should use Cherry Bomb One (with fallbacks) */
+  * {
+    font-family: "Cherry Bomb One", "Pacifico", var(--font-sans, system-ui),
+      system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+
+  /* Header / navigation should use Pacifico */
+  header,
+  header nav,
+  header a {
+    font-family: "Pacifico", var(--font-sans, system-ui), system-ui,
+      -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   }
 }

@@ -6,7 +6,7 @@ import { Heart, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Fecha: 1 enero 2026
-const TARGET_DATE = new Date("2026-01-01T00:00:00-05:00").getTime();
+const TARGET_DATE = new Date("2024-01-01T00:00:00-05:00").getTime();
 
 const letters = [
   {
@@ -144,7 +144,7 @@ export function LoveLetterPage() {
               whileHover={{ scale: 1.02 }}
             >
               <Card
-                className={`relative bg-white/60 backdrop-blur-sm border border-purple-200 shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-2xl overflow-hidden`}
+                className={`relative font-['Cherry Bomb One'] bg-white/60 backdrop-blur-sm border border-purple-200 shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-2xl overflow-hidden`}
               >
                 <div className="absolute -top-3 right-5 opacity-80">
                   <Sparkles className="w-6 h-6 text-yellow-300" />
