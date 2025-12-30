@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Heart, Clock, Sparkles } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Heart, Clock, Sparkles } from "lucide-react";
 
 // Fecha objetivo: 1 de enero de 2026 a las 00:00 hora Colombia (UTC-5)
-const TARGET_DATE = new Date().getTime()
+const TARGET_DATE = new Date().getTime();
 
 const letters = [
   {
@@ -28,64 +28,71 @@ const letters = [
     title: "Promesa",
     content: `Eres mi compañerita, y en este momento solo puedo imaginar un futuro cada día más cercano, donde seamos una familia, celebrando no solo un año más juntos, sino celebrando cada día, porque estar contigo es la victoria sobre la tristeza y la soledad. Mientras tenga vida, y mientras estés en mi vida, y sigamos andando de la mano de Dios, la tristeza nunca más me vencerá, ni lo hará contigo.`,
   },
-]
+];
 
 interface TimeLeft {
-  days: number
-  hours: number
-  minutes: number
-  seconds: number
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
 }
 
 export function LoveLetterPage() {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
-  const [isUnlocked, setIsUnlocked] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
+    setMounted(true);
 
     const calculateTimeLeft = () => {
-      const now = new Date().getTime()
-      const difference = TARGET_DATE - now
+      const now = new Date().getTime();
+      const difference = TARGET_DATE - now;
 
       if (difference <= 0) {
-        setIsUnlocked(true)
-        return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+        setIsUnlocked(true);
+        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
       }
 
       return {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        hours: Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        ),
         minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
         seconds: Math.floor((difference % (1000 * 60)) / 1000),
-      }
-    }
+      };
+    };
 
-    setTimeLeft(calculateTimeLeft())
+    setTimeLeft(calculateTimeLeft());
     if (
       calculateTimeLeft().days === 0 &&
       calculateTimeLeft().hours === 0 &&
       calculateTimeLeft().minutes === 0 &&
       calculateTimeLeft().seconds === 0
     ) {
-      setIsUnlocked(true)
+      setIsUnlocked(true);
     }
 
     const timer = setInterval(() => {
-      const newTimeLeft = calculateTimeLeft()
-      setTimeLeft(newTimeLeft)
-    }, 1000)
+      const newTimeLeft = calculateTimeLeft();
+      setTimeLeft(newTimeLeft);
+    }, 1000);
 
-    return () => clearInterval(timer)
-  }, [])
+    return () => clearInterval(timer);
+  }, []);
 
   if (!mounted) {
     return (
       <div className="min-h-screen bg-rose-50 flex items-center justify-center">
         <Heart className="w-12 h-12 text-rose-400 animate-pulse" />
       </div>
-    )
+    );
   }
 
   if (!isUnlocked) {
@@ -93,7 +100,10 @@ export function LoveLetterPage() {
       <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 flex flex-col items-center justify-center p-4">
         <div className="text-center max-w-2xl mx-auto">
           <div className="mb-8 relative">
-            <Heart className="w-24 h-24 text-rose-400 mx-auto animate-pulse" fill="currentColor" />
+            <Heart
+              className="w-24 h-24 text-rose-400 mx-auto animate-pulse"
+              fill="currentColor"
+            />
             <Sparkles className="w-8 h-8 text-amber-400 absolute top-0 right-1/3 animate-bounce" />
             <Sparkles className="w-6 h-6 text-amber-400 absolute bottom-0 left-1/3 animate-bounce delay-150" />
           </div>
@@ -125,7 +135,7 @@ export function LoveLetterPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -137,7 +147,9 @@ export function LoveLetterPage() {
             <Heart className="w-12 h-12 text-rose-500" fill="currentColor" />
             <Sparkles className="w-6 h-6 text-amber-400" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-serif text-rose-800 mb-2 text-balance">Para mi Zulicita</h1>
+          <h1 className="text-4xl md:text-5xl font-serif text-rose-800 mb-2 text-balance">
+            Para mi Zulicita
+          </h1>
           <p className="text-rose-500 italic">¡Feliz Año Nuevo 2026!</p>
         </header>
 
@@ -147,7 +159,9 @@ export function LoveLetterPage() {
               key={letter.id}
               className="relative bg-gradient-to-br from-white via-rose-50 to-pink-100 border-2 border-rose-200 shadow-2xl hover:scale-[1.025] hover:shadow-pink-200 transition-transform duration-300 rounded-3xl overflow-hidden group"
               style={{
-                animation: `fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) ${index * 0.18}s both`,
+                animation: `fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) ${
+                  index * 0.18
+                }s both`,
               }}
             >
               <div className="absolute -top-4 right-6 z-10 opacity-70 group-hover:opacity-100 transition-opacity">
@@ -156,17 +170,32 @@ export function LoveLetterPage() {
               <CardContent className="p-8 md:p-10 flex flex-col h-full font-[var(--love-font)]">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center shadow-inner border border-rose-200">
-                    <Heart className="w-6 h-6 text-rose-500 animate-pulse" fill="currentColor" />
+                    <Heart
+                      className="w-6 h-6 text-rose-500 animate-pulse"
+                      fill="currentColor"
+                    />
                   </div>
-                  <h2 className="text-2xl font-bold text-rose-700 tracking-wide drop-shadow-sm font-[var(--love-font)]">{letter.title}</h2>
+                  <h2 className="text-2xl font-bold text-rose-700 tracking-wide drop-shadow-sm font-[var(--love-font)]">
+                    {letter.title}
+                  </h2>
                 </div>
-                <p className="text-rose-900/90 leading-relaxed text-lg md:text-xl text-pretty font-[var(--love-font)]" style={{whiteSpace: 'pre-line'}}>{letter.content}</p>
+                <p
+                  className="text-rose-900/90 leading-relaxed text-lg md:text-xl text-pretty font-[var(--love-font)]"
+                  style={{ whiteSpace: "pre-line" }}
+                >
+                  {letter.content}
+                </p>
                 <div className="flex justify-end mt-8">
-                  <span className="text-rose-400 italic text-sm font-[var(--love-font)]">Con amor, tu Javi</span>
+                  <span className="text-rose-400 italic text-sm font-[var(--love-font)]">
+                    Con amor, tu Javi
+                  </span>
                 </div>
               </CardContent>
               <div className="absolute -bottom-4 left-6 z-10 opacity-70 group-hover:opacity-100 transition-opacity">
-                <Heart className="w-7 h-7 text-rose-300 animate-bounce" fill="currentColor" />
+                <Heart
+                  className="w-7 h-7 text-rose-300 animate-bounce"
+                  fill="currentColor"
+                />
               </div>
             </Card>
           ))}
@@ -182,10 +211,10 @@ export function LoveLetterPage() {
       </div>
 
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;700&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;700&display=swap");
         :root {
-          --love-font: 'Dancing Script', cursive;
-          --love-sans: 'Montserrat', sans-serif;
+          --love-font: "Dancing Script", cursive;
+          --love-sans: "Montserrat", sans-serif;
         }
         .font-\[var\(--love-font\)\] {
           font-family: var(--love-font), cursive !important;
@@ -204,15 +233,19 @@ export function LoveLetterPage() {
           }
         }
         @keyframes spin-slow {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
         .animate-spin-slow {
           animation: spin-slow 3.5s linear infinite;
         }
       `}</style>
     </div>
-  )
+  );
 }
 
 function TimeBlock({ value, label }: { value: number; label: string }) {
@@ -223,5 +256,5 @@ function TimeBlock({ value, label }: { value: number; label: string }) {
       </div>
       <div className="text-xs md:text-sm text-rose-500 mt-1">{label}</div>
     </div>
-  )
+  );
 }
