@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, Clock, Sparkles } from "lucide-react";
 
-
 // Fecha: 1 enero 2026
 const TARGET_DATE = new Date("2026-01-01T00:00:00-05:00").getTime();
 
@@ -39,19 +38,16 @@ interface TimeLeft {
   seconds: number;
 }
 
-
 export function LoveLetterPage() {
   // Simple motion transforms (no parallax) to avoid complexity/hydration issues
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [mounted, setMounted] = useState(false);
-
-  const cardColors = [
-    "from-yellow-100 via-yellow-200 to-purple-100",
-    "from-purple-200 via-indigo-200 to-blue-900",
-    "from-blue-900 via-purple-300 to-yellow-100",
-    "from-indigo-900 via-yellow-100 to-purple-200",
-  ];
 
   useEffect(() => {
     setMounted(true);
@@ -90,7 +86,10 @@ export function LoveLetterPage() {
     return (
       <div className="min-h-screen bg-linear-to-br from-rose-50 via-pink-50 to-rose-100 flex flex-col items-center justify-center p-4">
         <div className="text-center max-w-2xl mx-auto">
-          <Heart className="w-24 h-24 text-rose-400 mx-auto animate-pulse" fill="currentColor" />
+          <Heart
+            className="w-24 h-24 text-rose-400 mx-auto animate-pulse"
+            fill="currentColor"
+          />
           <h1 className="text-3xl md:text-4xl font-serif text-rose-800 mb-4">
             Algo especial te espera...
           </h1>
@@ -114,22 +113,43 @@ export function LoveLetterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-800 to-yellow-100 py-12 px-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-900 via-purple-800 to-yellow-100 py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        <motion.header initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-8">
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-8"
+        >
           <div className="flex items-center justify-center gap-4 mb-3">
             <Sparkles className="w-6 h-6 text-yellow-300" />
             <Heart className="w-12 h-12 text-purple-300" fill="currentColor" />
             <Sparkles className="w-6 h-6 text-yellow-300" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-semibold text-yellow-200 mb-1" style={{ fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto" }}>Para mi Zulicita</h1>
+          <h1
+            className="text-4xl md:text-5xl font-semibold text-yellow-200 mb-1"
+            style={{
+              fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto",
+            }}
+          >
+            Para mi Zulicita
+          </h1>
           <p className="text-purple-200 italic">¡Feliz Año Nuevo 2026!</p>
         </motion.header>
 
         <div className="grid gap-8 md:gap-10 grid-cols-1 md:grid-cols-2">
           {letters.map((letter, i) => (
-            <motion.div key={letter.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.08 }} whileHover={{ scale: 1.02 }}>
-              <Card className={`relative bg-white/60 backdrop-blur-sm border border-purple-200 shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-2xl overflow-hidden`}>
+            <motion.div
+              key={letter.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.08 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <Card
+                className={`relative bg-white/60 backdrop-blur-sm border border-purple-200 shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-2xl overflow-hidden`}
+              >
                 <div className="absolute -top-3 right-5 opacity-80">
                   <Sparkles className="w-6 h-6 text-yellow-300" />
                 </div>
@@ -137,13 +157,25 @@ export function LoveLetterPage() {
                 <CardContent className="p-6 md:p-8">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center border border-purple-100">
-                      <Heart className="w-5 h-5 text-purple-500" fill="currentColor" />
+                      <Heart
+                        className="w-5 h-5 text-purple-500"
+                        fill="currentColor"
+                      />
                     </div>
-                    <h2 className="text-xl font-medium text-blue-900">{letter.title}</h2>
+                    <h2 className="text-xl font-medium text-blue-900">
+                      {letter.title}
+                    </h2>
                   </div>
-                  <p className="text-blue-900/90 leading-relaxed text-base md:text-lg" style={{ whiteSpace: 'pre-line' }}>{letter.content}</p>
+                  <p
+                    className="text-blue-900/90 leading-relaxed text-base md:text-lg"
+                    style={{ whiteSpace: "pre-line" }}
+                  >
+                    {letter.content}
+                  </p>
                   <div className="flex justify-end mt-6">
-                    <span className="text-purple-400 italic text-sm">Con amor, tu Santicito</span>
+                    <span className="text-purple-400 italic text-sm">
+                      Con amor, tu Santicito
+                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -155,7 +187,13 @@ export function LoveLetterPage() {
   );
 }
 
-function TimeBlock({ value, label }: { readonly value: number; readonly label: string }) {
+function TimeBlock({
+  value,
+  label,
+}: {
+  readonly value: number;
+  readonly label: string;
+}) {
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 md:p-4 shadow-md border border-rose-200">
       <div className="text-2xl md:text-4xl font-bold text-rose-700 tabular-nums">
