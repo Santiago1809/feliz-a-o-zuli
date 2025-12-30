@@ -1,11 +1,34 @@
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
+import os from "os";
 
-const dataDir = path.join(process.cwd(), "data");
-if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+function chooseDbPath() {
+  // Allow override via env for deployments
+  const envPath = process.env.SQLITE_DB_PATH;
+  if (envPath) return envPath;
 
-const DB_PATH = path.join(dataDir, "messages.db");
+  const dataDir = path.join(process.cwd(), "data");
+
+  try {
+    // try to create data directory (works in dev)
+    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+
+    // verify we can write into it
+    const testFile = path.join(dataDir, ".writetest");
+    fs.writeFileSync(testFile, "ok");
+    fs.unlinkSync(testFile);
+
+    return path.join(dataDir, "messages.db");
+  } catch (err) {
+    // probably running on a read-only filesystem (Vercel). Fall back to tmpdir.
+    const tmpPath = path.join(os.tmpdir(), "messages.db");
+    console.warn("lib/db: data directory not writable, falling back to tmpdir:", tmpPath);
+    return tmpPath;
+  }
+}
+
+const DB_PATH = chooseDbPath();
 const db = new Database(DB_PATH);
 
 db.exec(`
