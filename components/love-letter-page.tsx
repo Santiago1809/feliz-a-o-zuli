@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, Clock, Sparkles } from "lucide-react";
 
-// Fecha objetivo: 1 de enero de 2026 a las 00:00 hora Colombia (UTC-5)
-const TARGET_DATE = new Date().getTime();
+
+// Fecha: 1 enero 2026
+const TARGET_DATE = new Date("2026-01-01T00:00:00-05:00").getTime();
 
 const letters = [
   {
@@ -37,53 +39,42 @@ interface TimeLeft {
   seconds: number;
 }
 
+
 export function LoveLetterPage() {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  // Simple motion transforms (no parallax) to avoid complexity/hydration issues
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const cardColors = [
+    "from-yellow-100 via-yellow-200 to-purple-100",
+    "from-purple-200 via-indigo-200 to-blue-900",
+    "from-blue-900 via-purple-300 to-yellow-100",
+    "from-indigo-900 via-yellow-100 to-purple-200",
+  ];
 
   useEffect(() => {
     setMounted(true);
 
-    const calculateTimeLeft = () => {
-      const now = new Date().getTime();
-      const difference = TARGET_DATE - now;
+    const calculate = () => {
+      const now = Date.now();
+      const diff = TARGET_DATE - now;
 
-      if (difference <= 0) {
+      if (diff <= 0) {
         setIsUnlocked(true);
         return { days: 0, hours: 0, minutes: 0, seconds: 0 };
       }
 
       return {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor(
-          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        ),
-        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((difference % (1000 * 60)) / 1000),
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((diff % (1000 * 60)) / 1000),
       };
     };
 
-    setTimeLeft(calculateTimeLeft());
-    if (
-      calculateTimeLeft().days === 0 &&
-      calculateTimeLeft().hours === 0 &&
-      calculateTimeLeft().minutes === 0 &&
-      calculateTimeLeft().seconds === 0
-    ) {
-      setIsUnlocked(true);
-    }
-
-    const timer = setInterval(() => {
-      const newTimeLeft = calculateTimeLeft();
-      setTimeLeft(newTimeLeft);
-    }, 1000);
-
+    setTimeLeft(calculate());
+    const timer = setInterval(() => setTimeLeft(calculate()), 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -97,25 +88,15 @@ export function LoveLetterPage() {
 
   if (!isUnlocked) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-linear-to-br from-rose-50 via-pink-50 to-rose-100 flex flex-col items-center justify-center p-4">
         <div className="text-center max-w-2xl mx-auto">
-          <div className="mb-8 relative">
-            <Heart
-              className="w-24 h-24 text-rose-400 mx-auto animate-pulse"
-              fill="currentColor"
-            />
-            <Sparkles className="w-8 h-8 text-amber-400 absolute top-0 right-1/3 animate-bounce" />
-            <Sparkles className="w-6 h-6 text-amber-400 absolute bottom-0 left-1/3 animate-bounce delay-150" />
-          </div>
-
-          <h1 className="text-3xl md:text-4xl font-serif text-rose-800 mb-4 text-balance">
+          <Heart className="w-24 h-24 text-rose-400 mx-auto animate-pulse" fill="currentColor" />
+          <h1 className="text-3xl md:text-4xl font-serif text-rose-800 mb-4">
             Algo especial te espera...
           </h1>
-
           <p className="text-rose-600 mb-8 text-lg">
             Este mensaje se desbloqueará el 1 de enero de 2026 a la medianoche
           </p>
-
           <div className="flex items-center justify-center gap-2 mb-8">
             <Clock className="w-5 h-5 text-rose-500" />
             <span className="text-rose-500 text-sm">Hora Colombia (UTC-5)</span>
@@ -127,128 +108,54 @@ export function LoveLetterPage() {
             <TimeBlock value={timeLeft.minutes} label="Min" />
             <TimeBlock value={timeLeft.seconds} label="Seg" />
           </div>
-
-          <div className="flex items-center justify-center gap-2 text-rose-400">
-            <Heart className="w-4 h-4" fill="currentColor" />
-            <span className="text-sm italic">Con todo mi amor...</span>
-            <Heart className="w-4 h-4" fill="currentColor" />
-          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        <header className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Sparkles className="w-6 h-6 text-amber-400" />
-            <Heart className="w-12 h-12 text-rose-500" fill="currentColor" />
-            <Sparkles className="w-6 h-6 text-amber-400" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-800 to-yellow-100 py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        <motion.header initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-8">
+          <div className="flex items-center justify-center gap-4 mb-3">
+            <Sparkles className="w-6 h-6 text-yellow-300" />
+            <Heart className="w-12 h-12 text-purple-300" fill="currentColor" />
+            <Sparkles className="w-6 h-6 text-yellow-300" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-serif text-rose-800 mb-2 text-balance">
-            Para mi Zulicita
-          </h1>
-          <p className="text-rose-500 italic">¡Feliz Año Nuevo 2026!</p>
-        </header>
+          <h1 className="text-4xl md:text-5xl font-semibold text-yellow-200 mb-1" style={{ fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto" }}>Para mi Zulicita</h1>
+          <p className="text-purple-200 italic">¡Feliz Año Nuevo 2026!</p>
+        </motion.header>
 
-        <div className="grid gap-10 md:gap-12 grid-cols-1 md:grid-cols-2">
-          {letters.map((letter, index) => (
-            <Card
-              key={letter.id}
-              className="relative bg-gradient-to-br from-white via-rose-50 to-pink-100 border-2 border-rose-200 shadow-2xl hover:scale-[1.025] hover:shadow-pink-200 transition-transform duration-300 rounded-3xl overflow-hidden group"
-              style={{
-                animation: `fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) ${
-                  index * 0.18
-                }s both`,
-              }}
-            >
-              <div className="absolute -top-4 right-6 z-10 opacity-70 group-hover:opacity-100 transition-opacity">
-                <Sparkles className="w-7 h-7 text-amber-400 animate-spin-slow" />
-              </div>
-              <CardContent className="p-8 md:p-10 flex flex-col h-full font-[var(--love-font)]">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center shadow-inner border border-rose-200">
-                    <Heart
-                      className="w-6 h-6 text-rose-500 animate-pulse"
-                      fill="currentColor"
-                    />
+        <div className="grid gap-8 md:gap-10 grid-cols-1 md:grid-cols-2">
+          {letters.map((letter, i) => (
+            <motion.div key={letter.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.08 }} whileHover={{ scale: 1.02 }}>
+              <Card className={`relative bg-white/60 backdrop-blur-sm border border-purple-200 shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-2xl overflow-hidden`}>
+                <div className="absolute -top-3 right-5 opacity-80">
+                  <Sparkles className="w-6 h-6 text-yellow-300" />
+                </div>
+
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center border border-purple-100">
+                      <Heart className="w-5 h-5 text-purple-500" fill="currentColor" />
+                    </div>
+                    <h2 className="text-xl font-medium text-blue-900">{letter.title}</h2>
                   </div>
-                  <h2 className="text-2xl font-bold text-rose-700 tracking-wide drop-shadow-sm font-[var(--love-font)]">
-                    {letter.title}
-                  </h2>
-                </div>
-                <p
-                  className="text-rose-900/90 leading-relaxed text-lg md:text-xl text-pretty font-[var(--love-font)]"
-                  style={{ whiteSpace: "pre-line" }}
-                >
-                  {letter.content}
-                </p>
-                <div className="flex justify-end mt-8">
-                  <span className="text-rose-400 italic text-sm font-[var(--love-font)]">
-                    Con amor, tu Javi
-                  </span>
-                </div>
-              </CardContent>
-              <div className="absolute -bottom-4 left-6 z-10 opacity-70 group-hover:opacity-100 transition-opacity">
-                <Heart
-                  className="w-7 h-7 text-rose-300 animate-bounce"
-                  fill="currentColor"
-                />
-              </div>
-            </Card>
+                  <p className="text-blue-900/90 leading-relaxed text-base md:text-lg" style={{ whiteSpace: 'pre-line' }}>{letter.content}</p>
+                  <div className="flex justify-end mt-6">
+                    <span className="text-purple-400 italic text-sm">Con amor, tu Santicito</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
-
-        <footer className="text-center mt-12 text-rose-400">
-          <div className="flex items-center justify-center gap-2">
-            <Heart className="w-4 h-4" fill="currentColor" />
-            <span className="italic">Te amo, mi corazón</span>
-            <Heart className="w-4 h-4" fill="currentColor" />
-          </div>
-        </footer>
       </div>
-
-      <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;700&display=swap");
-        :root {
-          --love-font: "Dancing Script", cursive;
-          --love-sans: "Montserrat", sans-serif;
-        }
-        .font-\[var\(--love-font\)\] {
-          font-family: var(--love-font), cursive !important;
-        }
-        .font-\[var\(--love-sans\)\] {
-          font-family: var(--love-sans), sans-serif !important;
-        }
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes spin-slow {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 3.5s linear infinite;
-        }
-      `}</style>
     </div>
   );
 }
 
-function TimeBlock({ value, label }: { value: number; label: string }) {
+function TimeBlock({ value, label }: { readonly value: number; readonly label: string }) {
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 md:p-4 shadow-md border border-rose-200">
       <div className="text-2xl md:text-4xl font-bold text-rose-700 tabular-nums">
