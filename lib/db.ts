@@ -31,7 +31,7 @@ function chooseDbPath() {
   }
 }
 
-const DB_PATH = chooseDbPath();
+export const DB_PATH = chooseDbPath();
 const db = new Database(DB_PATH);
 
 db.exec(`
